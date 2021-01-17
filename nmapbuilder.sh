@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #source /opt/myscripts
-source ~/Documents/ScriptTemp/functions_nmapbuilder.sh
+source ./functions_nmapbuilder.sh
 
 echo -e "Hello and welcome to nmap builder for all your simplified scanning needs. Please define target:\n (targets can can be a list of IPs, a range of IPs, a URL or a file with a list of IPs inside [if using a file please use the format '-iL <list-of-ips.txt>'].)"
 
@@ -17,61 +17,61 @@ while true; do
 				nmap -A -p${PORTS} $TARGET
 				;;
 			Build-a-Scan)
-			echo "Configure Scan:"
-			select OPTION in Ports Scan-Types Service/OS-Detection Host-Discovery Speed Firewall Misc Scripts Exit;	do 
-				case $OPTION in
-					Ports)
-						ports
-						PORTS=$?
-						;;
-					Scan-Types)
-						scan_options
-						SCAN=$?
-						;;
-					Services/OS-Detection)
-						echo before
-						SOS_detection
-						echo after
-						SOS=$?
-						;;
-					Host-Discovery)
-						host_detection	
-						HOST=$?
-						;;
-					Speed)
-						speed
-						SPEED=$?
-						;;
-					Firewall)
-						firewall
-						FIRE=$?
-						;;
-					Misc)
-						misc
-						MISC=$?
-						#echo "Misc. settings are currently "$MISC
-						;;
-					Scripts)
-						scripts
-						SCRIPT=$?
-						;;
-					Exit)
-						out
-						#echo Exiting
-						#break
-						;;
-				esac
-				done
+				echo "Configure Scan:"
+				select OPTION in Ports Scan-Types Service/OS-Detection Host-Discovery Speed Firewall Misc Scripts Back;	do 
+					case $OPTION in
+						Ports)
+							ports
+							PORTS=$?
+							;;
+						Scan-Types)
+							scan_options
+							SCAN=$?
+							;;
+						Services/OS-Detection)
+							echo before
+							SOS_detection
+							echo after
+							SOS=$?
+							;;
+						Host-Discovery)
+							host_detection	
+							HOST=$?
+							;;
+						Speed)
+							speed
+							SPEED=$?
+							;;
+						Firewall)
+							firewall
+							FIRE=$?
+							;;
+						Misc)
+							misc
+							MISC=$?
+							#echo "Misc. settings are currently "$MISC
+							;;
+						Scripts)
+							scripts
+							SCRIPT=$?
+							;;
+						Back)
+							#out
+							#echo Exiting
+							#break
+							;;
+						esac
+					done
 				;;
 			Change-Target)
-				echo "Please input target(s)"
+				echo "Please input target(s):"
 				read TARGET
 				;;
 			Exit)
-				echo "stopping script"
-				break
+				echo "Stopping Script"
+				exit	
 				;;
 		esac
 	done
-done
+	done
 nmap 

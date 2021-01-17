@@ -11,7 +11,9 @@ scan_options(){
 SOS_detection(){
 	choices=();
 	while true; do
-	echo -e "~All - displays OS, Version does script scanning and traceroute of target\n~Version - probes open ports for the software of services running on the port, this has intensity options (the higher the longer the scan will take)\n~OS Detection - collects TCP/IP fingerprints that are then compared to a database to return Vendor name, underlying OS, OS generation and device type (somewhat of a guessing game)" 
+	echo -e "~All - displays OS, Version does script scanning and traceroute of target\n\
+	~Version - probes open ports for the software of services running on the port, this has intensity options (the higher the longer the scan will take)\n\
+	~OS Detection - collects TCP/IP fingerprints that are then compared to a database to return Vendor name, underlying OS, OS generation and device type (somewhat of a guessing game)" 
 	select SOS in All Version OS-Detection; do
 		case SOS in
 			All)
