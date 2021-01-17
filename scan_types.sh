@@ -34,6 +34,6 @@ printf "You selected"; msg=" nothing"
 for i in ${!options[@]}; do 
     [[ "${choices[i]}" ]] && { printf " %s" "${options[i]}"; msg=""; }
 done
-echo "$msg"
+echo "$msg"								#display msg
 
 ##if this is too hard maybe use whiptail, its an already configured menu
