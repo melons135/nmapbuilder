@@ -1,16 +1,14 @@
 #!/bin/bash
 
+scan_type(){
+msg=""
 options_name=( 'TCP connect' 'TCP SYN [default]' 'TCP ACK' 'UDP [slow]' 'Dont Ping Host' 'Windows port' 'Maimon' ) 
 
 options_cmd=(-sT -sS -sU -Pn -sA -sW -sM)
 
 declare -A selected
 
-
-scan_type(){
-
 menu() {
-    a=0
     echo "Avaliable options:"
     for i in ${!options_name[@]}; do 					#lists option
 	    printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${options_name[i]}" #format specifies (number+string then string and new line)
@@ -32,18 +30,21 @@ while menu && read -rp "$prompt" num && [[ "$num" ]]; do
     { msg="Invalid option: $num"; continue; }
 
 # take one away from the number (compensating from the +1 above) then display the option that was checked
-    ((num--)); #msg="${options[num]} was ${choices[num]:+un}checked"
+    ((num--)); msg=""		###msg="${options[num]} was ${choices[num]:+un}checked"
 
 # adds or removes the + from the corrisponding option
     [[ "${choices[num]}" ]] && choices[num]="" || choices[num]="+"
 
 done
 
-printf "You selected "; msg="nothing, previous selections have been cleared"
+
+#create an array of selected values
 for i in ${!options_cmd[@]}; do 
-	[[ "${choices[i]}" ]] && selected+=" ${options_cmd[i]}" #{ printf " %s" "${options_cmd[i]}"; msg=""; }
+	[[ "${choices[i]}" ]] && selected+=" ${options_cmd[i]}" 
 done
-echo ${selected}
+#print results depending on what has been selected
+echo "You selected: $(if [[ "${selected[@]}" ]]; then echo "${selected}"; else echo Nothing.; fi)"
+#export so the 
 export selected
 }
 
