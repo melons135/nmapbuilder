@@ -27,25 +27,19 @@ while true; do
 				;;
 			Build-a-Scan)
 				echo "Configure Scan:"
-				select OPTION in Ports Scan-Types Service/OS-Detection Host-Discovery Speed Firewall Misc Scripts Back;	do 
+				select OPTION in Ports Scan-Options Service/OS-Detection Speed Firewall Misc Scripts Execute Back;	do 
 					case $OPTION in
 						Ports)
 							ports
 							PORTS=$?
 							;;
-						Scan-Types)
+						Scan-Options)
 							scan_options
 							SCAN=$?
 							;;
 						Services/OS-Detection)
-							echo before
 							SOS_detection
-							echo after
 							SOS=$?
-							;;
-						Host-Discovery)
-							host_detection	
-							HOST=$?
 							;;
 						Speed)
 							speed
@@ -58,16 +52,19 @@ while true; do
 						Misc)
 							misc
 							MISC=$?
-							#echo "Misc. settings are currently "$MISC
 							;;
 						Scripts)
 							scripts
 							SCRIPT=$?
 							;;
+						Execute)
+							echo "Executing command: nmap $PORTS $SCAN $SOS $FIRE $MISC $SCRIPT $TARGET"
+							nmap $PORTS $SCAN $SOS $FIRE $MISC $SCRIPT $TARGET
+							exit
+							;;
 						Back)
-							#out
-							#echo Exiting
-							#break
+							echo Exiting
+							break
 							;;
 						esac
 					done
@@ -77,7 +74,7 @@ while true; do
 				read TARGET
 				;;
 			Exit)
-				echo "Stopping Script"
+				echo Exiting...
 				exit	
 				;;
 		esac

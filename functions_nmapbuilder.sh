@@ -87,15 +87,25 @@ SOS_detection(){
 			*) echo "Invalid option, Try again"; continue;;
 		esac
 	done
-done
-}
-
-host_detection(){
-	echo host
 }
 
 speed(){
-	echo speed
+	echo "The speeds names are paranoid (0), sneaky (1), polite (2), normal (3), aggressive (4), and insane (5). The first two are for IDS evasion. Polite mode slows down the scan to use less bandwidth and target machine resources. Normal mode is the default. Aggressive and insane mode are for fast and super-fast internet connection, if this is not the case accuracy sacrificed for speed."
+	num=null
+
+	#display menu and take input and display prompt and set the input as variable 'num', when num is input execute body
+	while ["$num" = null]; do
+		read num
+
+		#check that 'num' is a digit and lies in the range of options
+		if [ "$num" != *[![:digit:]]* && num >= 0 && num <= 5 ] then
+			#if doesnt meet the above check, display below message and loop again
+			echo "Invalid option: $num"; continue
+		else
+			return $num
+			break
+		fi
+	done
 }
 
 firewall(){
