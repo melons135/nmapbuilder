@@ -27,7 +27,7 @@ while true; do
 				;;
 			Build-a-Scan)
 				echo "Configure Scan:"
-				select OPTION in Ports Scan-Options Service/OS-Detection Speed Firewall Misc Scripts Execute Back;	do 
+				select OPTION in Ports Scan-Options Service/OS-Detection Speed Firewall Scripts Execute Back;	do 
 					case $OPTION in
 						Ports)
 							ports
@@ -48,10 +48,6 @@ while true; do
 						Firewall)
 							firewall
 							FIRE=$?
-							;;
-						Misc)
-							misc
-							MISC=$?
 							;;
 						Scripts)
 							scripts

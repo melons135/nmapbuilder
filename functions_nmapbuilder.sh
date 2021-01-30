@@ -1,14 +1,36 @@
 #!/bin/bash
 
 ports(){
-	#this needs:
-	#	-p <port ranges>
-	#	--exclude-ports <port ranges>
-	#	-F (fast and limited port scan; top 100 ports)
-	#	-r (dont randomise ports)
-	#	--top-ports <#>
-	#these ranges should use standard nmap rules e.g.: -p 22,25,80 ; -p80-85,443,8080-9000 ; -p-100,60000- (up to 100 and beyond 60000) ; -p- ; -pT:<ports>,U:<ports>,P:<IP protocol>,S:<SCTP> ; -p <service name> (these work with regex so http* scans everything that starts with http)
-	echo ports
+	port_options=(Port Range, Exclude Ports, 'Top # Ports', Reset Selected)
+	declare -a ports_arr
+	select OPTION in port_options; do
+		case OPTION in
+			Port Range)
+				echo -e "Please input the range of ports you would like to scan.\n
+				This should be a comma seperated list and you can select a range with #1-#2, you can also input a sevice name and all ports with associated name will be scanned Some examples are:\n
+				22,25,80 ; 80-85,443,8080-9000 ; -100,60000- (up to 100 and beyond 60000) ; - (all ports) ; T:<TCP ports to scan>,U:<UDP ports to scan>; <service name>"
+				read -p 'list everything you would like to scan' port_no
+				ports_arr=+"-p$ports_no"
+				;;
+			Exclude Ports)
+				echo Input a list of the ports to exclude
+				read -p 'List ports to exclude' exclude
+				ports_arr=+$exclude
+				;;
+			'Top # Ports')
+				echo What number of the top ports would you like to scan, using the top 100 is the same as -F
+				read -p 'Number:' top
+				ports_arr=+$top
+				;;
+			Reset Selected)
+				ports_arr=()
+				;;
+			Exit)
+				echo Ending Port Selection
+				export $ports_arr
+				break
+		esac
+	done
 }
 
 scan_options(){
@@ -90,15 +112,15 @@ SOS_detection(){
 }
 
 speed(){
-	echo "The speeds names are paranoid (0), sneaky (1), polite (2), normal (3), aggressive (4), and insane (5). The first two are for IDS evasion. Polite mode slows down the scan to use less bandwidth and target machine resources. Normal mode is the default. Aggressive and insane mode are for fast and super-fast internet connection, if this is not the case accuracy sacrificed for speed."
+	echo "The speeds names are paranoid (0), sneaky (1), polite (2), normal (3), aggressive (4), and insane (5). The first two are for IDS evasion. Polite mode slows down the scan to use less bandwidth and target machine resources. Normal mode is the default. Aggressive and insane mode are for fast and super-fast internet connection, they can be used on slower internet connection but accuracy when subsiquently be sacrificed for speed."
 	num=null
 
 	#display menu and take input and display prompt and set the input as variable 'num', when num is input execute body
 	while ["$num" = null]; do
-		read num
+		read -rp 'Please enter a number between 1 and 5:' num
 
 		#check that 'num' is a digit and lies in the range of options
-		if [ "$num" != *[![:digit:]]* && num >= 0 && num <= 5 ] then
+		if [ "$num" != *[![:digit:]]* && num < 0 && num > 5 ] then
 			#if doesnt meet the above check, display below message and loop again
 			echo "Invalid option: $num"; continue
 		else
@@ -109,15 +131,13 @@ speed(){
 }
 
 firewall(){
-	echo firewall
-}
-
-misc(){
-	echo misc
+	echo firewall feaure coming soon
 }
 
 scripts(){
-	echo scripts 
+	echo -e 'A full list of scripts can be fund here: https://nmap.org/book/nse-scripts-list.html . Scripts are then added with --<name of script> into the box below:\n Please list all the scripts you wwish to use as this is reset each time.'
+	read -rp "Space seperate list of scripts (dont forget --):" scriptlist
+	export scriptlist
 }
 
 out(){
